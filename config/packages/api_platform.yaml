@@ -1,0 +1,25 @@
+api_platform:
+    mapping:
+        paths: ['%kernel.project_dir%/src/Entity']
+    patch_formats:
+        json: ['application/merge-patch+json']
+    swagger:
+        versions: [3]
+        api_keys:
+            apiKey:
+                name: Authorization
+                type: header
+    exception_to_status:
+        Symfony\Component\Serializer\Exception\ExceptionInterface: !php/const Symfony\Component\HttpFoundation\Response::HTTP_BAD_REQUEST
+        ApiPlatform\Core\Exception\InvalidArgumentException: !php/const Symfony\Component\HttpFoundation\Response::HTTP_BAD_REQUEST
+        ApiPlatform\Core\Exception\FilterValidationException: !php/const Symfony\Component\HttpFoundation\Response::HTTP_BAD_REQUEST
+        Doctrine\ORM\OptimisticLockException: !php/const Symfony\Component\HttpFoundation\Response::HTTP_CONFLICT
+
+        Symfony\Component\HttpKernel\Exception\NotFoundHttpException: !php/const Symfony\Component\HttpFoundation\Response::HTTP_NOT_FOUND
+        App\Exceptions\Cart\CartItemsLimitException: !php/const Symfony\Component\HttpFoundation\Response::HTTP_BAD_REQUEST
+    formats:
+        json:
+            mime_types: ['application/json']
+    error_formats:
+        json:
+            mime_types: ['application/json']

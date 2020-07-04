@@ -1,0 +1,40 @@
+version: '3'
+
+networks:
+  gog-network:
+    driver: bridge
+
+volumes:
+  mysql:
+    driver: local
+
+services:
+  php:
+    build:
+      context: ./docker/php
+    volumes:
+      - .:/var/www/html
+    expose:
+      - 9000
+    networks:
+      - gog-network
+
+  nginx:
+    image: nginx:alpine
+    ports:
+      - "80:80"
+    volumes:
+      - ./:/var/www/html
+      - ./docker/nginx/conf.d/:/etc/nginx/conf.d/
+    networks:
+      - gog-network
+
+  mysql:
+    image: mysql:5.7.6
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_DATABASE: gog_database
+      MYSQL_ROOT_PASSWORD: root
+    networks:
+      - gog-network
